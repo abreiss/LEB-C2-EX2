@@ -17,8 +17,8 @@ jobs:
       - name: Use composite action
         id: generate
         uses: abreiss/LEB-C2-EX2-COMP-GEN-STRING-@62fe3369a18437665f03d1051ee811f1e263f6a7
-        with:
-          input-string: 'input-string'
+      #  with:
+      #    input-string: 'input-string'
   matrix-job:
     needs: generate-string
     runs-on: ubuntu-latest
