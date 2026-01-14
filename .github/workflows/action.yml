@@ -8,6 +8,8 @@ on:
 jobs:
   generate-string:
     runs-on: ubuntu-latest
+    outputs:
+        my_string: ${{ steps.generate.outputs.result }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -17,12 +19,13 @@ jobs:
         uses: abreiss/LEB-C2-EX2-COMP-GEN-STRING-@62fe3369a18437665f03d1051ee811f1e263f6a7
         with:
           input-string: 'input-string'
-      
-      - name: Write output to file
-        run: echo "${{ steps.generate.outputs.result }}" > input.txt
-      
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: input-string-artifact
-          path: input.txt
+  matrix-job:
+    needs: generate-string
+    runs-on: ubuntu-latest
+    strategy:
+     matrix:
+        number: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    steps:
+        - name: Print output with number
+          run: |
+            echo "${{ needs.generate-string.outputs.my_string }}-${{ matrix.number }}"
