@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  generate-string:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Use composite action
+        id: generate
+        uses: abreiss/gLEB-C2-EX2-COMP-GEN-STRING@main
+        with:
+          input-string: 'input-string'
+      
+      - name: Write output to file
+        run: echo "${{ steps.generate.outputs.result }}" > input.txt
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: input-string-artifact
+          path: input.txt
