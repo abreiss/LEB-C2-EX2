@@ -1,21 +1,20 @@
-name: Generate string + matrix
+name: Reusable - generate string and matrix print
 
 on:
   workflow_call:
     inputs:
       input-string:
-        description: "String to generate"
         required: false
         type: string
-        default: "default-string"
+        default: default-string
       max:
-        description: "How many matrix entries"
         required: false
         type: number
         default: 10
+
     outputs:
-      generated:
-        description: "The generated string"
+      my_string:
+        description: "String returned from composite action"
         value: ${{ jobs.generate-string.outputs.my_string }}
 
 jobs:
@@ -24,6 +23,9 @@ jobs:
     outputs:
       my_string: ${{ steps.generate.outputs.result }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Use composite action
         id: generate
         uses: abreiss/LEB-C2-EX2-COMP-GEN-STRING-@62fe3369a18437665f03d1051ee811f1e263f6a7
@@ -35,7 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        number: [1,2,3,4,5,6,7,8,9,10]  # (see note below)
+        number: [1,2,3,4,5,6,7,8,9,10] # keep simple for now
     steps:
       - name: Print output with number
         run: echo "${{ needs.generate-string.outputs.my_string }}-${{ matrix.number }}"
